@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model tenants {
+  tenant_id   String   @id @default(uuid()) @db.Uuid
+  name        String
+  code        String   @unique
+  type        String   @default("company")
+  status      String   @default("active")
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  users       users[]
+  audit_logs  audit_logs[]
+}
+
+model users {
+  user_id       String   @id @default(uuid()) @db.Uuid
+  tenant_id     String   @db.Uuid
+  email         String   @unique
+  password_hash String
+  first_name    String
+  last_name     String
+  phone         String?
+  avatar_url    String?
+  status        String   @default("active")
+  last_login    DateTime?
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  tenant       tenants      @relation(fields: [tenant_id], references: [tenant_id])
+  user_roles   user_roles[]
+  audit_logs   audit_logs[]
+
+  @@index([tenant_id])
+  @@index([status])
+}
+
+model roles {
+  role_id     String   @id @default(uuid()) @db.Uuid
+  code        String   @unique
+  name        String
+  description String?
+  created_at  DateTime @default(now())
+
+  user_roles       user_roles[]
+  role_permissions role_permissions[]
+}
+
+model permissions {
+  permission_id String   @id @default(uuid()) @db.Uuid
+  code          String   @unique
+  name          String
+  description   String?
+
+  role_permissions role_permissions[]
+}
+
+model user_roles {
+  user_role_id String @id @default(uuid()) @db.Uuid
+  user_id      String @db.Uuid
+  role_id      String @db.Uuid
+
+  user users @relation(fields: [user_id], references: [user_id])
+  role roles @relation(fields: [role_id], references: [role_id])
+
+  @@unique([user_id, role_id])
+  @@index([user_id])
+  @@index([role_id])
+}
+
+model role_permissions {
+  role_permission_id String @id @default(uuid()) @db.Uuid
+  role_id            String @db.Uuid
+  permission_id      String @db.Uuid
+
+  role       roles       @relation(fields: [role_id], references: [role_id])
+  permission permissions @relation(fields: [permission_id], references: [permission_id])
+
+  @@unique([role_id, permission_id])
+}
+
+model audit_logs {
+  audit_id    String   @id @default(uuid()) @db.Uuid
+  tenant_id   String?  @db.Uuid
+  user_id     String?  @db.Uuid
+  action      String
+  entity_type String
+  entity_id   String?
+  metadata    Json     @default("{}")
+  created_at  DateTime @default(now())
+
+  tenant tenants? @relation(fields: [tenant_id], references: [tenant_id])
+  user   users?   @relation(fields: [user_id], references: [user_id])
+
+  @@index([tenant_id])
+  @@index([user_id])
+  @@index([created_at])
+  @@index([entity_type])
+}
