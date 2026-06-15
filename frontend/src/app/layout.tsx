@@ -1,5 +1,9 @@
 import './globals.css';
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  return props.children;
+  return (
+    <html lang="es">
+      <body>{props.children}</body>
+    </html>
+  );
 }
