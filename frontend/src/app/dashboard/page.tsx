@@ -30,6 +30,7 @@ export default function DashboardPage() {
         <article>
           <h2>Roles</h2>
           <p>Roles y permisos basicos.</p>
+          <a href="/roles">Abrir roles</a>
         </article>
       </section>
     </main>
