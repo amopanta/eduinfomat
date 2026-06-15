@@ -87,7 +87,11 @@ export class UsersService {
         tenant_id: user.tenant_id,
         user_id: user.user_id,
         entity_id: user.user_id,
-        metadata: dto
+        metadata: {
+          first_name: dto.first_name || null,
+          last_name: dto.last_name || null,
+          status: dto.status || null
+        }
       }
     });
 
