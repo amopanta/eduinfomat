@@ -13,10 +13,19 @@ export class RbacService {
     return this.prisma.roles.create({ data });
   }
 
+  updateRole(role_id: string, data: { name?: string; description?: string }) {
+    return this.prisma.roles.update({ where: { role_id }, data });
+  }
+
+  async deleteRole(role_id: string) {
+    await this.prisma.user_roles.deleteMany({ where: { role_id } });
+    await this.prisma.role_permissions.deleteMany({ where: { role_id } });
+    return this.prisma.roles.delete({ where: { role_id } });
+  }
+
   async assignRole(user_id: string, role_id: string) {
     const assignment = await this.prisma.user_roles.create({ data: { user_id, role_id } });
     const user = await this.prisma.users.findUnique({ where: { user_id } });
-
     await this.prisma.audit_logs.create({
       data: {
         action: 'ROLE_ASSIGNED',
@@ -27,22 +36,15 @@ export class RbacService {
         metadata: { role_id }
       }
     });
-
     return assignment;
   }
 
   getUserRoles(user_id: string) {
-    return this.prisma.user_roles.findMany({
-      where: { user_id },
-      include: { role: true }
-    });
+    return this.prisma.user_roles.findMany({ where: { user_id }, include: { role: true } });
   }
 
   getRolePermissions(role_id: string) {
-    return this.prisma.role_permissions.findMany({
-      where: { role_id },
-      include: { permission: true }
-    });
+    return this.prisma.role_permissions.findMany({ where: { role_id }, include: { permission: true } });
   }
 
   can(_userId: string, _permissionCode: string): boolean {
