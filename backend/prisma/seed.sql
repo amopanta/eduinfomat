@@ -16,5 +16,16 @@ VALUES
   (uuid_generate_v4(), 'tenants.read', 'Leer tenants', 'Consultar tenants'),
   (uuid_generate_v4(), 'tenants.create', 'Crear tenants', 'Crear tenants'),
   (uuid_generate_v4(), 'tenants.update', 'Actualizar tenants', 'Actualizar tenants'),
-  (uuid_generate_v4(), 'tenants.delete', 'Eliminar tenants', 'Desactivar tenants')
+  (uuid_generate_v4(), 'tenants.delete', 'Eliminar tenants', 'Desactivar tenants'),
+  (uuid_generate_v4(), 'roles.read', 'Leer roles', 'Consultar roles y roles de usuarios'),
+  (uuid_generate_v4(), 'roles.create', 'Crear roles', 'Crear roles'),
+  (uuid_generate_v4(), 'roles.update', 'Actualizar roles', 'Actualizar roles'),
+  (uuid_generate_v4(), 'roles.delete', 'Eliminar roles', 'Eliminar roles'),
+  (uuid_generate_v4(), 'roles.assign', 'Asignar roles', 'Asignar roles a usuarios'),
+  (uuid_generate_v4(), 'roles.permissions.assign', 'Asignar permisos a roles', 'Asignar permisos a roles'),
+  (uuid_generate_v4(), 'roles.permissions.remove', 'Remover permisos de roles', 'Remover permisos de roles'),
+  (uuid_generate_v4(), 'permissions.read', 'Leer permisos', 'Consultar permisos'),
+  (uuid_generate_v4(), 'permissions.create', 'Crear permisos', 'Crear permisos'),
+  (uuid_generate_v4(), 'permissions.update', 'Actualizar permisos', 'Actualizar permisos'),
+  (uuid_generate_v4(), 'permissions.delete', 'Eliminar permisos', 'Eliminar permisos')
 ON CONFLICT (code) DO NOTHING;
