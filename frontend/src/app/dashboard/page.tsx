@@ -21,6 +21,7 @@ export default function DashboardPage() {
         <article>
           <h2>Usuarios</h2>
           <p>Gestion de usuarios del tenant.</p>
+          <a href="/users">Abrir usuarios</a>
         </article>
         <article>
           <h2>Tenants</h2>
