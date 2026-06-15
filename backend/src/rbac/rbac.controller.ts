@@ -35,6 +35,16 @@ export class RbacController {
     return this.service.createPermission(body);
   }
 
+  @Put('permissions/:permissionId')
+  updatePermission(@Param('permissionId') permissionId: string, @Body() body: { name?: string; description?: string }) {
+    return this.service.updatePermission(permissionId, body);
+  }
+
+  @Delete('permissions/:permissionId')
+  deletePermission(@Param('permissionId') permissionId: string) {
+    return this.service.deletePermission(permissionId);
+  }
+
   @Post(':roleId/permissions')
   assignPermissionToRole(@Param('roleId') roleId: string, @Body() body: { permission_id: string }) {
     return this.service.assignPermissionToRole(roleId, body.permission_id);
