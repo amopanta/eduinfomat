@@ -12,8 +12,7 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto) {
-    const user = await this.usersService.create(dto);
-    return user;
+    return this.usersService.create(dto);
   }
 
   async login(email: string, password: string) {
@@ -37,6 +36,7 @@ export class AuthService {
 
     return {
       access_token: await this.jwtService.signAsync(payload),
+      refresh_token: await this.jwtService.signAsync(payload, { expiresIn: '7d' }),
       token_type: 'Bearer',
       user: {
         id: user.user_id,
@@ -44,5 +44,22 @@ export class AuthService {
         tenant_id: user.tenant_id
       }
     };
+  }
+
+  async refresh(user: { sub: string; email: string; tenant_id: string }) {
+    const payload = {
+      sub: user.sub,
+      email: user.email,
+      tenant_id: user.tenant_id
+    };
+
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+      token_type: 'Bearer'
+    };
+  }
+
+  logout() {
+    return { success: true };
   }
 }
