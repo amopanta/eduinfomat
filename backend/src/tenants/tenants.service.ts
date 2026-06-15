@@ -15,15 +15,45 @@ export class TenantsService {
     return this.prisma.tenants.findUnique({ where: { tenant_id: id } });
   }
 
-  create(dto: CreateTenantDto) {
-    return this.prisma.tenants.create({ data: dto });
+  async create(dto: CreateTenantDto) {
+    const tenant = await this.prisma.tenants.create({ data: dto });
+    await this.prisma.audit_logs.create({
+      data: {
+        action: 'TENANT_CREATED',
+        entity_type: 'tenants',
+        tenant_id: tenant.tenant_id,
+        entity_id: tenant.tenant_id,
+        metadata: { code: tenant.code }
+      }
+    });
+    return tenant;
   }
 
-  update(id: string, dto: UpdateTenantDto) {
-    return this.prisma.tenants.update({ where: { tenant_id: id }, data: dto });
+  async update(id: string, dto: UpdateTenantDto) {
+    const tenant = await this.prisma.tenants.update({ where: { tenant_id: id }, data: dto });
+    await this.prisma.audit_logs.create({
+      data: {
+        action: 'TENANT_UPDATED',
+        entity_type: 'tenants',
+        tenant_id: tenant.tenant_id,
+        entity_id: tenant.tenant_id,
+        metadata: dto
+      }
+    });
+    return tenant;
   }
 
-  deactivate(id: string) {
-    return this.prisma.tenants.update({ where: { tenant_id: id }, data: { status: 'inactive' } });
+  async deactivate(id: string) {
+    const tenant = await this.prisma.tenants.update({ where: { tenant_id: id }, data: { status: 'inactive' } });
+    await this.prisma.audit_logs.create({
+      data: {
+        action: 'TENANT_DELETED',
+        entity_type: 'tenants',
+        tenant_id: tenant.tenant_id,
+        entity_id: tenant.tenant_id,
+        metadata: { status: tenant.status }
+      }
+    });
+    return tenant;
   }
 }
