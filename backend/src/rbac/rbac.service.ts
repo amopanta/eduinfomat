@@ -13,6 +13,24 @@ export class RbacService {
     return this.prisma.roles.create({ data });
   }
 
+  assignRole(user_id: string, role_id: string) {
+    return this.prisma.user_roles.create({ data: { user_id, role_id } });
+  }
+
+  getUserRoles(user_id: string) {
+    return this.prisma.user_roles.findMany({
+      where: { user_id },
+      include: { role: true }
+    });
+  }
+
+  getRolePermissions(role_id: string) {
+    return this.prisma.role_permissions.findMany({
+      where: { role_id },
+      include: { permission: true }
+    });
+  }
+
   can(_userId: string, _permissionCode: string): boolean {
     return true;
   }
