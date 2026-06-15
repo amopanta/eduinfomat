@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
+import { AuditService } from '../audit/audit.service';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 
@@ -8,11 +9,20 @@ import { RegisterDto } from './dto/register.dto';
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly auditService: AuditService
   ) {}
 
   async register(dto: RegisterDto) {
-    return this.usersService.create(dto);
+    const user = await this.usersService.create(dto);
+    await this.auditService.log({
+      action: 'USER_REGISTERED',
+      entity_type: 'users',
+      tenant_id: user.tenant_id,
+      user_id: user.user_id,
+      entity_id: user.user_id
+    });
+    return user;
   }
 
   async login(email: string, password: string) {
@@ -27,6 +37,14 @@ export class AuthService {
     if (!valid) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
+
+    await this.auditService.log({
+      action: 'LOGIN',
+      entity_type: 'auth',
+      tenant_id: user.tenant_id,
+      user_id: user.user_id,
+      entity_id: user.user_id
+    });
 
     const payload = {
       sub: user.user_id,
@@ -59,7 +77,16 @@ export class AuthService {
     };
   }
 
-  logout() {
+  async logout(user?: { sub: string; tenant_id: string }) {
+    if (user) {
+      await this.auditService.log({
+        action: 'LOGOUT',
+        entity_type: 'auth',
+        tenant_id: user.tenant_id,
+        user_id: user.sub,
+        entity_id: user.sub
+      });
+    }
     return { success: true };
   }
 }
