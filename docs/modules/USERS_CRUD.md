@@ -1,4 +1,4 @@
-# Modulo Usuarios - CRUD inicial
+# Modulo Usuarios - CRUD
 
 ## Backend
 
@@ -9,6 +9,7 @@ Endpoints disponibles:
 - POST /api/users
 - PUT /api/users/:id
 - DELETE /api/users/:id
+- POST /api/roles/assign
 
 Para listar usuarios por tenant se usa temporalmente el header:
 
@@ -28,13 +29,16 @@ Funciones actuales:
 
 - Ingresar Tenant ID.
 - Listar usuarios del tenant.
+- Buscar usuario por nombre, correo o estado.
 - Crear usuario.
+- Seleccionar usuario.
+- Editar nombres, apellidos y estado.
 - Desactivar usuario.
+- Asignar rol usando Role ID.
 
 ## Pendientes
 
-- Edicion visual de usuario.
-- Asignacion de roles desde la UI.
+- Selector visual de roles.
+- Consulta visual de roles asignados por usuario.
 - Paginacion.
-- Busqueda por correo o nombre.
 - Guard por rol para administradores.
