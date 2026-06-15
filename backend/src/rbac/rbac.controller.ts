@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { RbacService } from './rbac.service';
 
 @Controller('roles')
@@ -13,6 +13,16 @@ export class RbacController {
   @Post()
   createRole(@Body() body: { code: string; name: string; description?: string }) {
     return this.service.createRole(body);
+  }
+
+  @Put(':roleId')
+  updateRole(@Param('roleId') roleId: string, @Body() body: { name?: string; description?: string }) {
+    return this.service.updateRole(roleId, body);
+  }
+
+  @Delete(':roleId')
+  deleteRole(@Param('roleId') roleId: string) {
+    return this.service.deleteRole(roleId);
   }
 
   @Post('assign')
