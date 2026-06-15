@@ -27,7 +27,7 @@ export class AuthController {
 
   @UseGuards(JwtGuard)
   @Post('logout')
-  logout() {
-    return this.authService.logout();
+  logout(@CurrentUser() user: { sub: string; tenant_id: string }) {
+    return this.authService.logout(user);
   }
 }
