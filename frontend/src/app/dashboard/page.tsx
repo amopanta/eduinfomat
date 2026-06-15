@@ -24,13 +24,18 @@ export default function DashboardPage() {
           <a href="/users">Abrir usuarios</a>
         </article>
         <article>
-          <h2>Tenants</h2>
-          <p>Gestion de organizaciones.</p>
+          <h2>Roles</h2>
+          <p>Gestion de roles de plataforma.</p>
+          <a href="/roles">Abrir roles</a>
         </article>
         <article>
-          <h2>Roles</h2>
-          <p>Roles y permisos basicos.</p>
-          <a href="/roles">Abrir roles</a>
+          <h2>Permisos</h2>
+          <p>Gestion de permisos y asignacion a roles.</p>
+          <a href="/permissions">Abrir permisos</a>
+        </article>
+        <article>
+          <h2>Tenants</h2>
+          <p>Gestion de organizaciones.</p>
         </article>
       </section>
     </main>
