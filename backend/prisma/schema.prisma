@@ -34,9 +34,10 @@ model users {
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 
-  tenant       tenants      @relation(fields: [tenant_id], references: [tenant_id])
-  user_roles   user_roles[]
-  audit_logs   audit_logs[]
+  tenant          tenants          @relation(fields: [tenant_id], references: [tenant_id])
+  user_roles      user_roles[]
+  audit_logs      audit_logs[]
+  refresh_tokens  refresh_tokens[]
 
   @@index([tenant_id])
   @@index([status])
@@ -84,6 +85,20 @@ model role_permissions {
   permission permissions @relation(fields: [permission_id], references: [permission_id])
 
   @@unique([role_id, permission_id])
+}
+
+model refresh_tokens {
+  token_id    String    @id @default(uuid()) @db.Uuid
+  user_id     String    @db.Uuid
+  token_hash  String
+  expires_at  DateTime
+  revoked_at  DateTime?
+  created_at  DateTime  @default(now())
+
+  user users @relation(fields: [user_id], references: [user_id])
+
+  @@index([user_id])
+  @@index([expires_at])
 }
 
 model audit_logs {
