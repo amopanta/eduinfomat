@@ -12,6 +12,9 @@ jobs:
     defaults:
       run:
         working-directory: backend
+    env:
+      DATABASE_URL: postgresql://infomatt:infomatt_dev_password@localhost:5432/infomatt
+      JWT_SECRET: ci_secret
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,6 +34,8 @@ jobs:
     defaults:
       run:
         working-directory: frontend
+    env:
+      NEXT_PUBLIC_API_URL: http://localhost:4000/api
     steps:
       - name: Checkout
         uses: actions/checkout@v4
