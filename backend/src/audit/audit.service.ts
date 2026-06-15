@@ -8,9 +8,10 @@ export class AuditService {
   log(data: {
     action: string;
     entity_type: string;
-    tenant_id?: string;
-    user_id?: string;
-    entity_id?: string;
+    tenant_id?: string | null;
+    user_id?: string | null;
+    entity_id?: string | null;
+    metadata?: Record<string, unknown>;
   }) {
     return this.prisma.audit_logs.create({
       data: {
@@ -19,7 +20,7 @@ export class AuditService {
         tenant_id: data.tenant_id || null,
         user_id: data.user_id || null,
         entity_id: data.entity_id || null,
-        metadata: {}
+        metadata: data.metadata || {}
       }
     });
   }
