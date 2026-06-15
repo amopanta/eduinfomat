@@ -13,8 +13,22 @@ export class RbacService {
     return this.prisma.roles.create({ data });
   }
 
-  assignRole(user_id: string, role_id: string) {
-    return this.prisma.user_roles.create({ data: { user_id, role_id } });
+  async assignRole(user_id: string, role_id: string) {
+    const assignment = await this.prisma.user_roles.create({ data: { user_id, role_id } });
+    const user = await this.prisma.users.findUnique({ where: { user_id } });
+
+    await this.prisma.audit_logs.create({
+      data: {
+        action: 'ROLE_ASSIGNED',
+        entity_type: 'user_roles',
+        tenant_id: user?.tenant_id || null,
+        user_id,
+        entity_id: assignment.user_role_id,
+        metadata: { role_id }
+      }
+    });
+
+    return assignment;
   }
 
   getUserRoles(user_id: string) {
