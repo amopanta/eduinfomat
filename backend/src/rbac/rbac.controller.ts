@@ -25,6 +25,26 @@ export class RbacController {
     return this.service.deleteRole(roleId);
   }
 
+  @Get('permissions')
+  listPermissions() {
+    return this.service.listPermissions();
+  }
+
+  @Post('permissions')
+  createPermission(@Body() body: { code: string; name: string; description?: string }) {
+    return this.service.createPermission(body);
+  }
+
+  @Post(':roleId/permissions')
+  assignPermissionToRole(@Param('roleId') roleId: string, @Body() body: { permission_id: string }) {
+    return this.service.assignPermissionToRole(roleId, body.permission_id);
+  }
+
+  @Delete(':roleId/permissions/:permissionId')
+  removePermissionFromRole(@Param('roleId') roleId: string, @Param('permissionId') permissionId: string) {
+    return this.service.removePermissionFromRole(roleId, permissionId);
+  }
+
   @Post('assign')
   assignRole(@Body() body: { user_id: string; role_id: string }) {
     return this.service.assignRole(body.user_id, body.role_id);
