@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import type { FormEvent } from 'react';
 import { apiPost } from '../../lib/api';
 
 export default function LoginPage() {
@@ -8,7 +9,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  async function submit(event: React.FormEvent) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setMessage('');
 
