@@ -27,16 +27,52 @@ export class RbacService {
     return this.prisma.permissions.findMany({ orderBy: { code: 'asc' } });
   }
 
-  createPermission(data: { code: string; name: string; description?: string }) {
-    return this.prisma.permissions.create({ data });
+  async createPermission(data: { code: string; name: string; description?: string }) {
+    const permission = await this.prisma.permissions.create({ data });
+    await this.prisma.audit_logs.create({
+      data: {
+        action: 'PERMISSION_CREATED',
+        entity_type: 'permissions',
+        entity_id: permission.permission_id,
+        metadata: { code: permission.code }
+      }
+    });
+    return permission;
+  }
+
+  updatePermission(permission_id: string, data: { name?: string; description?: string }) {
+    return this.prisma.permissions.update({ where: { permission_id }, data });
+  }
+
+  async deletePermission(permission_id: string) {
+    await this.prisma.role_permissions.deleteMany({ where: { permission_id } });
+    return this.prisma.permissions.delete({ where: { permission_id } });
   }
 
   async assignPermissionToRole(role_id: string, permission_id: string) {
-    return this.prisma.role_permissions.create({ data: { role_id, permission_id } });
+    const assignment = await this.prisma.role_permissions.create({ data: { role_id, permission_id } });
+    await this.prisma.audit_logs.create({
+      data: {
+        action: 'PERMISSION_ASSIGNED_TO_ROLE',
+        entity_type: 'role_permissions',
+        entity_id: assignment.role_permission_id,
+        metadata: { role_id, permission_id }
+      }
+    });
+    return assignment;
   }
 
   async removePermissionFromRole(role_id: string, permission_id: string) {
-    return this.prisma.role_permissions.delete({ where: { role_id_permission_id: { role_id, permission_id } } });
+    const removed = await this.prisma.role_permissions.delete({ where: { role_id_permission_id: { role_id, permission_id } } });
+    await this.prisma.audit_logs.create({
+      data: {
+        action: 'PERMISSION_REMOVED_FROM_ROLE',
+        entity_type: 'role_permissions',
+        entity_id: removed.role_permission_id,
+        metadata: { role_id, permission_id }
+      }
+    });
+    return removed;
   }
 
   async assignRole(user_id: string, role_id: string) {
