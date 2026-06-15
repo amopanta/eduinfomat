@@ -5,26 +5,6 @@ import { RbacService } from './rbac.service';
 export class RbacController {
   constructor(private readonly service: RbacService) {}
 
-  @Get()
-  listRoles() {
-    return this.service.listRoles();
-  }
-
-  @Post()
-  createRole(@Body() body: { code: string; name: string; description?: string }) {
-    return this.service.createRole(body);
-  }
-
-  @Put(':roleId')
-  updateRole(@Param('roleId') roleId: string, @Body() body: { name?: string; description?: string }) {
-    return this.service.updateRole(roleId, body);
-  }
-
-  @Delete(':roleId')
-  deleteRole(@Param('roleId') roleId: string) {
-    return this.service.deleteRole(roleId);
-  }
-
   @Get('permissions')
   listPermissions() {
     return this.service.listPermissions();
@@ -45,16 +25,6 @@ export class RbacController {
     return this.service.deletePermission(permissionId);
   }
 
-  @Post(':roleId/permissions')
-  assignPermissionToRole(@Param('roleId') roleId: string, @Body() body: { permission_id: string }) {
-    return this.service.assignPermissionToRole(roleId, body.permission_id);
-  }
-
-  @Delete(':roleId/permissions/:permissionId')
-  removePermissionFromRole(@Param('roleId') roleId: string, @Param('permissionId') permissionId: string) {
-    return this.service.removePermissionFromRole(roleId, permissionId);
-  }
-
   @Post('assign')
   assignRole(@Body() body: { user_id: string; role_id: string }) {
     return this.service.assignRole(body.user_id, body.role_id);
@@ -65,8 +35,38 @@ export class RbacController {
     return this.service.getUserRoles(userId);
   }
 
+  @Get()
+  listRoles() {
+    return this.service.listRoles();
+  }
+
+  @Post()
+  createRole(@Body() body: { code: string; name: string; description?: string }) {
+    return this.service.createRole(body);
+  }
+
+  @Put(':roleId')
+  updateRole(@Param('roleId') roleId: string, @Body() body: { name?: string; description?: string }) {
+    return this.service.updateRole(roleId, body);
+  }
+
+  @Post(':roleId/permissions')
+  assignPermissionToRole(@Param('roleId') roleId: string, @Body() body: { permission_id: string }) {
+    return this.service.assignPermissionToRole(roleId, body.permission_id);
+  }
+
+  @Delete(':roleId/permissions/:permissionId')
+  removePermissionFromRole(@Param('roleId') roleId: string, @Param('permissionId') permissionId: string) {
+    return this.service.removePermissionFromRole(roleId, permissionId);
+  }
+
   @Get(':roleId/permissions')
   getRolePermissions(@Param('roleId') roleId: string) {
     return this.service.getRolePermissions(roleId);
+  }
+
+  @Delete(':roleId')
+  deleteRole(@Param('roleId') roleId: string) {
+    return this.service.deleteRole(roleId);
   }
 }
