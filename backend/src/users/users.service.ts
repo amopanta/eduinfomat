@@ -32,8 +32,7 @@ export class UsersService {
 
   async create(dto: CreateUserDto) {
     const password_hash = await bcrypt.hash(dto.password, 10);
-
-    return this.prisma.users.create({
+    const user = await this.prisma.users.create({
       data: {
         tenant_id: dto.tenant_id,
         email: dto.email,
@@ -51,14 +50,28 @@ export class UsersService {
         created_at: true
       }
     });
+
+    await this.prisma.audit_logs.create({
+      data: {
+        action: 'USER_CREATED',
+        entity_type: 'users',
+        tenant_id: user.tenant_id,
+        user_id: user.user_id,
+        entity_id: user.user_id,
+        metadata: { email: user.email }
+      }
+    });
+
+    return user;
   }
 
-  update(userId: string, dto: UpdateUserDto) {
-    return this.prisma.users.update({
+  async update(userId: string, dto: UpdateUserDto) {
+    const user = await this.prisma.users.update({
       where: { user_id: userId },
       data: dto,
       select: {
         user_id: true,
+        tenant_id: true,
         email: true,
         first_name: true,
         last_name: true,
@@ -66,13 +79,39 @@ export class UsersService {
         updated_at: true
       }
     });
+
+    await this.prisma.audit_logs.create({
+      data: {
+        action: 'USER_UPDATED',
+        entity_type: 'users',
+        tenant_id: user.tenant_id,
+        user_id: user.user_id,
+        entity_id: user.user_id,
+        metadata: dto
+      }
+    });
+
+    return user;
   }
 
-  deactivate(userId: string) {
-    return this.prisma.users.update({
+  async deactivate(userId: string) {
+    const user = await this.prisma.users.update({
       where: { user_id: userId },
       data: { status: 'inactive' },
-      select: { user_id: true, status: true, updated_at: true }
+      select: { user_id: true, tenant_id: true, status: true, updated_at: true }
     });
+
+    await this.prisma.audit_logs.create({
+      data: {
+        action: 'USER_DELETED',
+        entity_type: 'users',
+        tenant_id: user.tenant_id,
+        user_id: user.user_id,
+        entity_id: user.user_id,
+        metadata: { status: user.status }
+      }
+    });
+
+    return user;
   }
 }
