@@ -23,6 +23,22 @@ export class RbacService {
     return this.prisma.roles.delete({ where: { role_id } });
   }
 
+  listPermissions() {
+    return this.prisma.permissions.findMany({ orderBy: { code: 'asc' } });
+  }
+
+  createPermission(data: { code: string; name: string; description?: string }) {
+    return this.prisma.permissions.create({ data });
+  }
+
+  async assignPermissionToRole(role_id: string, permission_id: string) {
+    return this.prisma.role_permissions.create({ data: { role_id, permission_id } });
+  }
+
+  async removePermissionFromRole(role_id: string, permission_id: string) {
+    return this.prisma.role_permissions.delete({ where: { role_id_permission_id: { role_id, permission_id } } });
+  }
+
   async assignRole(user_id: string, role_id: string) {
     const assignment = await this.prisma.user_roles.create({ data: { user_id, role_id } });
     const user = await this.prisma.users.findUnique({ where: { user_id } });
