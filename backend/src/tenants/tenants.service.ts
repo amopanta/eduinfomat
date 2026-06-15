@@ -37,7 +37,11 @@ export class TenantsService {
         entity_type: 'tenants',
         tenant_id: tenant.tenant_id,
         entity_id: tenant.tenant_id,
-        metadata: dto
+        metadata: {
+          name: dto.name || null,
+          status: dto.status || null,
+          type: dto.type || null
+        }
       }
     });
     return tenant;
