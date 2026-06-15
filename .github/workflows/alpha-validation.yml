@@ -1,0 +1,32 @@
+name: Alpha Validation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://infomatt:infomatt_dev_password@localhost:5432/infomatt
+      JWT_SECRET: ci_secret
+      NEXT_PUBLIC_API_URL: http://localhost:4000/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Backend install
+        working-directory: backend
+        run: npm install
+      - name: Backend prisma generate
+        working-directory: backend
+        run: npx prisma generate
+      - name: Backend build
+        working-directory: backend
+        run: npm run build
+      - name: Frontend install
+        working-directory: frontend
+        run: npm install
+      - name: Frontend build
+        working-directory: frontend
+        run: npm run build
