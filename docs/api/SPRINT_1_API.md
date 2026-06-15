@@ -8,6 +8,8 @@ GET /api/health
 
 POST /api/auth/register
 POST /api/auth/login
+POST /api/auth/refresh
+POST /api/auth/logout
 
 ## Users
 
@@ -29,6 +31,9 @@ DELETE /api/tenants/:id
 
 GET /api/roles
 POST /api/roles
+POST /api/roles/assign
+GET /api/roles/users/:userId
+GET /api/roles/:roleId/permissions
 
 ## Headers
 
