@@ -2,21 +2,24 @@
 
 import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
-import { apiDelete, apiGet, apiPost } from '../../lib/api';
+import { apiDelete, apiGet, apiPost, apiPut } from '../../lib/api';
 
 type PermissionRow = { permission_id: string; code: string; name: string; description?: string | null };
 type RolePermissionRow = { role_permission_id: string; permission_id: string; permission: PermissionRow };
 
 const emptyForm = { code: '', name: '', description: '' };
+const emptyEdit = { name: '', description: '' };
 
 export default function PermissionsPage() {
   const [permissions, setPermissions] = useState<PermissionRow[]>([]);
   const [rolePermissions, setRolePermissions] = useState<RolePermissionRow[]>([]);
+  const [selected, setSelected] = useState<PermissionRow | null>(null);
   const [roleId, setRoleId] = useState('');
   const [permissionId, setPermissionId] = useState('');
   const [query, setQuery] = useState('');
   const [message, setMessage] = useState('');
   const [form, setForm] = useState(emptyForm);
+  const [edit, setEdit] = useState(emptyEdit);
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
@@ -53,6 +56,36 @@ export default function PermissionsPage() {
       setMessage('Permiso creado.');
     } catch {
       setMessage('No fue posible crear permiso.');
+    }
+  }
+
+  function selectPermission(permission: PermissionRow) {
+    setSelected(permission);
+    setEdit({ name: permission.name, description: permission.description || '' });
+    setPermissionId(permission.permission_id);
+  }
+
+  async function updatePermission(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!selected) return setMessage('Selecciona un permiso.');
+    try {
+      await apiPut(`/roles/permissions/${selected.permission_id}`, edit, token());
+      setSelected(null);
+      setEdit(emptyEdit);
+      await loadPermissions();
+      setMessage('Permiso actualizado.');
+    } catch {
+      setMessage('No fue posible actualizar permiso.');
+    }
+  }
+
+  async function deletePermission(permission_id: string) {
+    try {
+      await apiDelete(`/roles/permissions/${permission_id}`, token());
+      await loadPermissions();
+      setMessage('Permiso eliminado.');
+    } catch {
+      setMessage('No fue posible eliminar permiso.');
     }
   }
 
@@ -100,6 +133,15 @@ export default function PermissionsPage() {
           </form>
         </article>
         <article>
+          <h2>Editar permiso</h2>
+          {selected ? <p>Seleccionado: {selected.code}</p> : <p>Selecciona un permiso.</p>}
+          <form onSubmit={updatePermission}>
+            <input value={edit.name} onChange={(e) => setEdit({ ...edit, name: e.target.value })} placeholder="Nombre" />
+            <input value={edit.description} onChange={(e) => setEdit({ ...edit, description: e.target.value })} placeholder="Descripcion" />
+            <button type="submit">Guardar permiso</button>
+          </form>
+        </article>
+        <article>
           <h2>Asignar a rol</h2>
           <form onSubmit={assignPermission}>
             <input value={roleId} onChange={(e) => setRoleId(e.target.value)} placeholder="Role ID" />
@@ -112,8 +154,8 @@ export default function PermissionsPage() {
       <p>{message}</p>
       <h2>Listado de permisos</h2>
       <table>
-        <thead><tr><th>Codigo</th><th>Nombre</th><th>Descripcion</th><th>ID</th></tr></thead>
-        <tbody>{filtered.map((p) => <tr key={p.permission_id}><td>{p.code}</td><td>{p.name}</td><td>{p.description}</td><td>{p.permission_id}</td></tr>)}</tbody>
+        <thead><tr><th>Codigo</th><th>Nombre</th><th>Descripcion</th><th>ID</th><th>Acciones</th></tr></thead>
+        <tbody>{filtered.map((p) => <tr key={p.permission_id}><td>{p.code}</td><td>{p.name}</td><td>{p.description}</td><td>{p.permission_id}</td><td><button type="button" onClick={() => selectPermission(p)}>Editar</button>{' '}<button type="button" onClick={() => deletePermission(p.permission_id)}>Eliminar</button></td></tr>)}</tbody>
       </table>
       <h2>Permisos asignados al rol</h2>
       <table>
