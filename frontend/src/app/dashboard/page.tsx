@@ -34,6 +34,11 @@ export default function DashboardPage() {
           <a href="/permissions">Abrir permisos</a>
         </article>
         <article>
+          <h2>Auditoria</h2>
+          <p>Consulta de eventos y trazabilidad.</p>
+          <a href="/audit">Abrir auditoria</a>
+        </article>
+        <article>
           <h2>Tenants</h2>
           <p>Gestion de organizaciones.</p>
         </article>
