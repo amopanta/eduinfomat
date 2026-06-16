@@ -39,6 +39,11 @@ export default function DashboardPage() {
           <a href="/audit">Abrir auditoria</a>
         </article>
         <article>
+          <h2>Cursos</h2>
+          <p>Gestion academica inicial.</p>
+          <a href="/courses">Abrir cursos</a>
+        </article>
+        <article>
           <h2>Tenants</h2>
           <p>Gestion de organizaciones.</p>
         </article>
