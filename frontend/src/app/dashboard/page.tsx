@@ -44,6 +44,11 @@ export default function DashboardPage() {
           <a href="/courses">Abrir cursos</a>
         </article>
         <article>
+          <h2>Modulos</h2>
+          <p>Gestion de modulos por curso.</p>
+          <a href="/modules">Abrir modulos</a>
+        </article>
+        <article>
           <h2>Tenants</h2>
           <p>Gestion de organizaciones.</p>
         </article>
