@@ -9,6 +9,7 @@ ON CONFLICT (code) DO NOTHING;
 
 INSERT INTO permissions (permission_id, code, name, description)
 VALUES
+  (uuid_generate_v4(), 'dashboard.read', 'Leer dashboard', 'Consultar resumen y actividad del dashboard'),
   (uuid_generate_v4(), 'users.read', 'Leer usuarios', 'Consultar usuarios'),
   (uuid_generate_v4(), 'users.create', 'Crear usuarios', 'Crear usuarios'),
   (uuid_generate_v4(), 'users.update', 'Actualizar usuarios', 'Actualizar usuarios'),
