@@ -17,7 +17,7 @@ VALUES
   (uuid_generate_v4(), 'tenants.read', 'Leer tenants', 'Consultar tenants'),
   (uuid_generate_v4(), 'tenants.create', 'Crear tenants', 'Crear tenants'),
   (uuid_generate_v4(), 'tenants.update', 'Actualizar tenants', 'Actualizar tenants'),
-  (uuid_generate_v4(), 'tenants.delete', 'Eliminar tenants', 'Desactivar tenants'),
+  (uuid_generate_v4(), 'tenants.delete', 'Desactivar tenants', 'Desactivar tenants'),
   (uuid_generate_v4(), 'roles.read', 'Leer roles', 'Consultar roles y roles de usuarios'),
   (uuid_generate_v4(), 'roles.create', 'Crear roles', 'Crear roles'),
   (uuid_generate_v4(), 'roles.update', 'Actualizar roles', 'Actualizar roles'),
@@ -28,5 +28,7 @@ VALUES
   (uuid_generate_v4(), 'permissions.read', 'Leer permisos', 'Consultar permisos'),
   (uuid_generate_v4(), 'permissions.create', 'Crear permisos', 'Crear permisos'),
   (uuid_generate_v4(), 'permissions.update', 'Actualizar permisos', 'Actualizar permisos'),
-  (uuid_generate_v4(), 'permissions.delete', 'Eliminar permisos', 'Eliminar permisos')
+  (uuid_generate_v4(), 'permissions.delete', 'Eliminar permisos', 'Eliminar permisos'),
+  (uuid_generate_v4(), 'audit.read', 'Leer auditoria', 'Consultar eventos de auditoria'),
+  (uuid_generate_v4(), 'audit.export', 'Exportar auditoria', 'Exportar eventos de auditoria')
 ON CONFLICT (code) DO NOTHING;
