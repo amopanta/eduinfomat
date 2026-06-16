@@ -12,7 +12,7 @@ VALUES
   (uuid_generate_v4(), 'users.read', 'Leer usuarios', 'Consultar usuarios'),
   (uuid_generate_v4(), 'users.create', 'Crear usuarios', 'Crear usuarios'),
   (uuid_generate_v4(), 'users.update', 'Actualizar usuarios', 'Actualizar usuarios'),
-  (uuid_generate_v4(), 'users.delete', 'Eliminar usuarios', 'Desactivar usuarios'),
+  (uuid_generate_v4(), 'users.delete', 'Desactivar usuarios', 'Desactivar usuarios'),
   (uuid_generate_v4(), 'users.roles.assign', 'Asignar roles desde usuarios', 'Asignar roles a usuarios desde el modulo de usuarios'),
   (uuid_generate_v4(), 'tenants.read', 'Leer tenants', 'Consultar tenants'),
   (uuid_generate_v4(), 'tenants.create', 'Crear tenants', 'Crear tenants'),
@@ -34,5 +34,9 @@ VALUES
   (uuid_generate_v4(), 'courses.read', 'Leer cursos', 'Consultar cursos'),
   (uuid_generate_v4(), 'courses.create', 'Crear cursos', 'Crear cursos'),
   (uuid_generate_v4(), 'courses.update', 'Actualizar cursos', 'Actualizar cursos'),
-  (uuid_generate_v4(), 'courses.delete', 'Desactivar cursos', 'Desactivar cursos')
+  (uuid_generate_v4(), 'courses.delete', 'Desactivar cursos', 'Desactivar cursos'),
+  (uuid_generate_v4(), 'modules.read', 'Leer modulos', 'Consultar modulos'),
+  (uuid_generate_v4(), 'modules.create', 'Crear modulos', 'Crear modulos'),
+  (uuid_generate_v4(), 'modules.update', 'Actualizar modulos', 'Actualizar modulos'),
+  (uuid_generate_v4(), 'modules.delete', 'Desactivar modulos', 'Desactivar modulos')
 ON CONFLICT (code) DO NOTHING;
