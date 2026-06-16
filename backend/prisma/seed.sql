@@ -13,6 +13,7 @@ VALUES
   (uuid_generate_v4(), 'users.create', 'Crear usuarios', 'Crear usuarios'),
   (uuid_generate_v4(), 'users.update', 'Actualizar usuarios', 'Actualizar usuarios'),
   (uuid_generate_v4(), 'users.delete', 'Eliminar usuarios', 'Desactivar usuarios'),
+  (uuid_generate_v4(), 'users.roles.assign', 'Asignar roles desde usuarios', 'Asignar roles a usuarios desde el modulo de usuarios'),
   (uuid_generate_v4(), 'tenants.read', 'Leer tenants', 'Consultar tenants'),
   (uuid_generate_v4(), 'tenants.create', 'Crear tenants', 'Crear tenants'),
   (uuid_generate_v4(), 'tenants.update', 'Actualizar tenants', 'Actualizar tenants'),
