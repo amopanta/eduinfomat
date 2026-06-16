@@ -9,9 +9,10 @@ import { AuditModule } from './audit/audit.module';
 import { InstallModule } from './install/install.module';
 import { CoursesModule } from './courses/courses.module';
 import { ModulesModule } from './modules/modules.module';
+import { LessonsModule } from './lessons/lessons.module';
 
 @Module({
-  imports: [DatabaseModule, InstallModule, AuthModule, UsersModule, TenantsModule, RbacModule, AuditModule, CoursesModule, ModulesModule],
+  imports: [DatabaseModule, InstallModule, AuthModule, UsersModule, TenantsModule, RbacModule, AuditModule, CoursesModule, ModulesModule, LessonsModule],
   controllers: [HealthController]
 })
 export class AppModule {}
