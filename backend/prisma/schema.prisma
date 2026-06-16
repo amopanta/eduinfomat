@@ -115,13 +115,33 @@ model courses {
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 
-  tenant     tenants @relation(fields: [tenant_id], references: [tenant_id])
-  instructor users?  @relation("course_instructor", fields: [instructor_id], references: [user_id])
+  tenant     tenants  @relation(fields: [tenant_id], references: [tenant_id])
+  instructor users?   @relation("course_instructor", fields: [instructor_id], references: [user_id])
+  modules    modules[]
 
   @@unique([tenant_id, code])
   @@index([tenant_id])
   @@index([instructor_id])
   @@index([status])
+}
+
+model modules {
+  module_id   String   @id @default(uuid()) @db.Uuid
+  course_id   String   @db.Uuid
+  code        String
+  name        String
+  description String?
+  sort_order  Int      @default(0)
+  status      String   @default("draft")
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  course courses @relation(fields: [course_id], references: [course_id])
+
+  @@unique([course_id, code])
+  @@index([course_id])
+  @@index([status])
+  @@index([sort_order])
 }
 
 model audit_logs {
