@@ -7,9 +7,10 @@ import { TenantsModule } from './tenants/tenants.module';
 import { RbacModule } from './rbac/rbac.module';
 import { AuditModule } from './audit/audit.module';
 import { InstallModule } from './install/install.module';
+import { CoursesModule } from './courses/courses.module';
 
 @Module({
-  imports: [DatabaseModule, InstallModule, AuthModule, UsersModule, TenantsModule, RbacModule, AuditModule],
+  imports: [DatabaseModule, InstallModule, AuthModule, UsersModule, TenantsModule, RbacModule, AuditModule, CoursesModule],
   controllers: [HealthController]
 })
 export class AppModule {}
