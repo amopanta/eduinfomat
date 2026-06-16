@@ -30,5 +30,9 @@ VALUES
   (uuid_generate_v4(), 'permissions.update', 'Actualizar permisos', 'Actualizar permisos'),
   (uuid_generate_v4(), 'permissions.delete', 'Eliminar permisos', 'Eliminar permisos'),
   (uuid_generate_v4(), 'audit.read', 'Leer auditoria', 'Consultar eventos de auditoria'),
-  (uuid_generate_v4(), 'audit.export', 'Exportar auditoria', 'Exportar eventos de auditoria')
+  (uuid_generate_v4(), 'audit.export', 'Exportar auditoria', 'Exportar eventos de auditoria'),
+  (uuid_generate_v4(), 'courses.read', 'Leer cursos', 'Consultar cursos'),
+  (uuid_generate_v4(), 'courses.create', 'Crear cursos', 'Crear cursos'),
+  (uuid_generate_v4(), 'courses.update', 'Actualizar cursos', 'Actualizar cursos'),
+  (uuid_generate_v4(), 'courses.delete', 'Desactivar cursos', 'Desactivar cursos')
 ON CONFLICT (code) DO NOTHING;
