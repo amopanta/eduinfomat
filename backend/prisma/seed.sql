@@ -38,5 +38,9 @@ VALUES
   (uuid_generate_v4(), 'modules.read', 'Leer modulos', 'Consultar modulos'),
   (uuid_generate_v4(), 'modules.create', 'Crear modulos', 'Crear modulos'),
   (uuid_generate_v4(), 'modules.update', 'Actualizar modulos', 'Actualizar modulos'),
-  (uuid_generate_v4(), 'modules.delete', 'Desactivar modulos', 'Desactivar modulos')
+  (uuid_generate_v4(), 'modules.delete', 'Desactivar modulos', 'Desactivar modulos'),
+  (uuid_generate_v4(), 'lessons.read', 'Leer lecciones', 'Consultar lecciones'),
+  (uuid_generate_v4(), 'lessons.create', 'Crear lecciones', 'Crear lecciones'),
+  (uuid_generate_v4(), 'lessons.update', 'Actualizar lecciones', 'Actualizar lecciones'),
+  (uuid_generate_v4(), 'lessons.delete', 'Desactivar lecciones', 'Desactivar lecciones')
 ON CONFLICT (code) DO NOTHING;
