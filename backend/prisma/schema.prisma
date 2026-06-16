@@ -17,6 +17,7 @@ model tenants {
   updated_at  DateTime @updatedAt
 
   users       users[]
+  courses     courses[]
   audit_logs  audit_logs[]
 }
 
@@ -34,10 +35,11 @@ model users {
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 
-  tenant          tenants          @relation(fields: [tenant_id], references: [tenant_id])
-  user_roles      user_roles[]
-  audit_logs      audit_logs[]
-  refresh_tokens  refresh_tokens[]
+  tenant             tenants          @relation(fields: [tenant_id], references: [tenant_id])
+  user_roles         user_roles[]
+  audit_logs         audit_logs[]
+  refresh_tokens     refresh_tokens[]
+  instructor_courses courses[]        @relation("course_instructor")
 
   @@index([tenant_id])
   @@index([status])
@@ -99,6 +101,27 @@ model refresh_tokens {
 
   @@index([user_id])
   @@index([expires_at])
+}
+
+model courses {
+  course_id     String   @id @default(uuid()) @db.Uuid
+  tenant_id     String   @db.Uuid
+  instructor_id String?  @db.Uuid
+  code          String
+  name          String
+  description   String?
+  category      String?
+  status        String   @default("draft")
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  tenant     tenants @relation(fields: [tenant_id], references: [tenant_id])
+  instructor users?  @relation("course_instructor", fields: [instructor_id], references: [user_id])
+
+  @@unique([tenant_id, code])
+  @@index([tenant_id])
+  @@index([instructor_id])
+  @@index([status])
 }
 
 model audit_logs {
