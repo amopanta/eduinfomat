@@ -136,10 +136,32 @@ model modules {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
-  course courses @relation(fields: [course_id], references: [course_id])
+  course  courses  @relation(fields: [course_id], references: [course_id])
+  lessons lessons[]
 
   @@unique([course_id, code])
   @@index([course_id])
+  @@index([status])
+  @@index([sort_order])
+}
+
+model lessons {
+  lesson_id   String   @id @default(uuid()) @db.Uuid
+  module_id   String   @db.Uuid
+  code        String
+  name        String
+  lesson_type String
+  content     String?
+  sort_order  Int      @default(0)
+  status      String   @default("draft")
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  module modules @relation(fields: [module_id], references: [module_id])
+
+  @@unique([module_id, code])
+  @@index([module_id])
+  @@index([lesson_type])
   @@index([status])
   @@index([sort_order])
 }
