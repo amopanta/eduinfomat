@@ -77,7 +77,7 @@ export class LessonsService {
         tenant_id: lesson.module.course.tenant_id,
         user_id: actorUserId || null,
         entity_id: lesson.lesson_id,
-        metadata: dto
+        metadata: { ...dto }
       }
     });
 
