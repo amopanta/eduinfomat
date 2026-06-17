@@ -15,6 +15,11 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: infomatt_redis_prod
+    restart: unless-stopped
+
   backend:
     build:
       context: ./backend
@@ -23,6 +28,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_started
     environment:
       NODE_ENV: production
       PORT: 4000
