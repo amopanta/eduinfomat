@@ -67,7 +67,7 @@ export class CoursesService {
         tenant_id: course.tenant_id,
         user_id: actorUserId || null,
         entity_id: course.course_id,
-        metadata: dto
+        metadata: { ...dto }
       }
     });
 
