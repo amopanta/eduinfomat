@@ -62,7 +62,7 @@ export class ModulesService {
         tenant_id: module.course.tenant_id,
         user_id: actorUserId || null,
         entity_id: module.module_id,
-        metadata: dto
+        metadata: { ...dto }
       }
     });
 
